@@ -13,10 +13,16 @@ average) labelled in an annotation.
 import streamlit as st
 import pandas as pd
 import plotly.express as px
+from pathlib import Path
 
 st.set_page_config(page_title="World Happiness", page_icon="🌍", layout="wide")
 
-df = pd.read_csv('../data/world_happiness_2023.csv')
+# .resolve() first: when invoked as `streamlit run app.py` from inside week09/,
+# __file__ is just "app.py" (single segment) — parent.parent would collapse to
+# cwd without resolving to an absolute path first. This works locally AND on
+# Streamlit Community Cloud, unlike a plain '../data/' relative path.
+DATA_DIR = Path(__file__).resolve().parent.parent / 'data'
+df = pd.read_csv(DATA_DIR / 'world_happiness_2023.csv')
 df.columns = ['Country', 'Region', 'Score', 'GDP', 'Social_Support',
                'Life_Expectancy', 'Freedom', 'Generosity', 'Corruption']
 
